@@ -10,6 +10,7 @@ public class JobApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private  String userEmail;
      private String companyName;
      private String jobRole;
      private String location;
@@ -19,8 +20,9 @@ public class JobApplication {
      private String applyDate;
 
      public JobApplication() {}
-     public  JobApplication(String companyName, String jobRole, String location,
+     public  JobApplication(String userEmail, String companyName, String jobRole, String location,
                             String status, Double salary, Boolean isRemote, String applyDate ) {
+         this.userEmail = userEmail;
          this.companyName = companyName;
          this.jobRole = jobRole;
          this.location = location;
@@ -35,7 +37,10 @@ public class JobApplication {
          return id;
      }
 
-     public String getCompanyName() {
+    public String getUserEmail() { return userEmail; }
+    public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
+
+    public String getCompanyName() {
          return companyName;
      }
      public void setCompanyName(String companyName) {
