@@ -2,6 +2,7 @@ package com.example.job_tracker_application.controller;
 
 import com.example.job_tracker_application.model.JobApplication;
 import com.example.job_tracker_application.repository.JobApplicationRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,13 +18,15 @@ public class JobApplicationController {
 
     @PostMapping
     public JobApplication createJob(@RequestBody JobApplication job) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        job.setUserEmail(email);
         return repository.save(job);
     }
 
     @GetMapping
     public List<JobApplication> getAllJobs() {
-        return  repository.findAll();
-    }
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return  repository.findByUserEmail(email); }
 
     @PutMapping("/{id}")
     public JobApplication updateJob(@PathVariable Long id, @RequestBody JobApplication updatedJob) {
