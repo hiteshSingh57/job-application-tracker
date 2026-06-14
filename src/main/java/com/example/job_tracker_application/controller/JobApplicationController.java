@@ -31,7 +31,10 @@ public class JobApplicationController {
     @PutMapping("/{id}")
     public JobApplication updateJob(@PathVariable Long id, @RequestBody JobApplication updatedJob) {
         JobApplication job = repository.findById(id).orElseThrow();
-
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (!job.getUserEmail().equals(email)) {
+            throw new RuntimeException("You are not Authorized to update this job");
+        }
         job.setCompanyName(updatedJob.getCompanyName());
         job.setLocation(updatedJob.getLocation());
         job.setJobRole(updatedJob.getJobRole());
@@ -39,12 +42,16 @@ public class JobApplicationController {
         job.setStatus(updatedJob.getStatus());
         job.setIsRemote(updatedJob.getIsRemote());
         job.setApplyDate(updatedJob.getApplyDate());
-
         return repository.save(job);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteJob(@PathVariable Long id) {
+    public String deleteJob(@PathVariable Long id ) {
+        JobApplication job = repository.findById(id).orElseThrow();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(!job.getUserEmail().equals(email)) {
+            throw new RuntimeException("You are not Authorized to delete this job");
+        }
         repository.deleteById(id);
         return "Job deleted Successfully" ;
     }
